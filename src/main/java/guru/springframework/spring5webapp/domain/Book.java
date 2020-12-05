@@ -2,18 +2,43 @@ package guru.springframework.spring5webapp.domain;
 
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+@Entity
 public class Book {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
   private String title;
   private String isbn;
-  private Set<Author> authorSet;
 
-  public Book(String title, String isbn, Set<Author> authorSet) {
+  @ManyToMany
+  @JoinTable(name="author_book", joinColumns = @JoinColumn(name="book_id"),
+  inverseJoinColumns = @JoinColumn(name="author_id"))
+  private Set<Author> authors;
+
+  public Book(String title, String isbn, Set<Author> authors) {
     this.title = title;
     this.isbn = isbn;
-    this.authorSet = authorSet;
+    this.authors = authors;
   }
 
   public Book() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle() {
@@ -32,11 +57,11 @@ public class Book {
     this.isbn = isbn;
   }
 
-  public Set<Author> getAuthorSet() {
-    return authorSet;
+  public Set<Author> getAuthors() {
+    return authors;
   }
 
-  public void setAuthorSet(Set<Author> authorSet) {
-    this.authorSet = authorSet;
+  public void setAuthors(Set<Author> authors) {
+    this.authors = authors;
   }
 }
